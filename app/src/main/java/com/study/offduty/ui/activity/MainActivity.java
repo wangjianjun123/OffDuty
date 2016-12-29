@@ -13,7 +13,6 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.tvTimeLeft)
     TextView tvMain;
-    //TODO测试下提交
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
