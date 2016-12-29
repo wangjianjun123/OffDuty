@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.tvTimeLeft)
     TextView tvMain;
 
+    // TODO: 2016/12/29
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
