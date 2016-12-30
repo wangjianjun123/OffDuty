@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout android:id="@+id/activity_main"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -22,18 +22,21 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
+            android:shadowColor="#ffee00ff"
+            android:shadowRadius="10"
             android:text="74"
-            android:textColor="@color/colorMinute"
+            android:textColor="#ffffffff"
             android:textSize="160sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/tvTimeLeft"
-            android:layout_toEndOf="@id/tvTimeLeft"
-            android:layout_toRightOf="@id/tvTimeLeft"
+            android:layout_alignBaseline="@+id/tvTimeLeft"
+            android:layout_toRightOf="@+id/tvTimeLeft"
+            android:shadowColor="#ffee00ff"
+            android:shadowRadius="5"
             android:text="@string/str_min"
-            android:textSize="16sp" />
+            android:textAppearance="?android:attr/textAppearanceInverse" />
     </RelativeLayout>
 
     <LinearLayout
