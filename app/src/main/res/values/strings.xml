@@ -2,4 +2,5 @@
     <string name="app_name">Off Duty</string>
     <string name="str_min">min</string>
     <string name="str_sec">sec</string>
+    <string name="str_mil">mil</string>
 </resources>

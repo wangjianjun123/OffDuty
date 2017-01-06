@@ -52,19 +52,27 @@ public class MainActivity extends AppCompatActivity {
         Date tempDate = DateUtil.str2Date(offStr, DateUtil.FORMAT_YMDHM);
         calendarOff.setTime(tempDate);
         timeOffWork = calendarOff.getTimeInMillis();
-        String timeLeftMinutes = getTimeLeftMinutes();
+        String timeLeftMinutes = getTimeLeft();
         tvMain.setText(timeLeftMinutes);
         tvUnit.setText(R.string.str_min);
-        handler.postDelayed(runnable, 1000);
+        handler.post(runnable);
         tvMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (showMode == ShowMode.MINUTE) {
-                    showMode = ShowMode.SECOND;
-                    tvUnit.setText(R.string.str_sec);
-                } else if (showMode == ShowMode.SECOND) {
-                    showMode = ShowMode.MINUTE;
-                    tvUnit.setText(R.string.str_min);
+                switch (showMode) {
+                    case MINUTE:
+                        showMode = ShowMode.SECOND;
+                        handler.removeCallbacks(runnable);
+                        handler.post(runnable);
+                        tvUnit.setText(R.string.str_sec);
+                        break;
+                    case SECOND:
+                    case MILLIS:
+                        showMode = ShowMode.MINUTE;
+                        handler.removeCallbacks(runnable);
+                        handler.post(runnable);
+                        tvUnit.setText(R.string.str_min);
+                        break;
                 }
             }
         });
@@ -76,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            String timeLeftMinutes = getTimeLeftMinutes();
+            String timeLeftMinutes = getTimeLeft();
             tvMain.setText(timeLeftMinutes);
             handler.postDelayed(this, 1000);
         }
@@ -87,13 +95,18 @@ public class MainActivity extends AppCompatActivity {
      *
      * @return 分钟数
      */
-    private String getTimeLeftMinutes() {
+    private String getTimeLeft() {
         timeNow = System.currentTimeMillis();
         long timeLeft = timeOffWork - timeNow;
-        if (showMode == ShowMode.MINUTE) {
-            timeLeft = Long.valueOf(timeLeft / (1000 * 60)).intValue();
-        } else if (showMode == ShowMode.SECOND) {
-            timeLeft = Long.valueOf(timeLeft / 1000).intValue();
+        switch (showMode) {
+            case MINUTE:
+                timeLeft = Long.valueOf(timeLeft / (1000 * 60)).intValue();
+                break;
+            case SECOND:
+                timeLeft = Long.valueOf(timeLeft / 1000).intValue();
+                break;
+            case MILLIS:
+                timeLeft = Long.valueOf(timeLeft).intValue();
         }
         return String.valueOf(timeLeft);
     }
