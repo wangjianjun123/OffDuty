@@ -3,10 +3,13 @@ package com.study.offduty.ui.activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.TextView;
 
 import com.study.offduty.R;
+import com.study.offduty.ui.view.FavorLayout;
 import com.study.offduty.utils.DateUtil;
 
 import java.util.Calendar;
@@ -27,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.tvUnit)
     TextView tvUnit;
+
+    @BindView(R.id.viewFavor)
+    FavorLayout viewFavor;
 
     long timeNow;
     Calendar calendarOff;
@@ -76,6 +82,30 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        //爱心
+        tvMain.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                viewFavor.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewFavor.addFavor();
+                    }
+                }, 0);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
     }
 
     /**
