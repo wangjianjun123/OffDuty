@@ -73,10 +73,10 @@ public class FavorLayout extends RelativeLayout {
         setBackgroundColor(ContextCompat.getColor(context, R.color.colorBlue50));
         //系统的差值器
         mInterpolator = new Interpolator[4];
-        mInterpolator[0] = new LinearInterpolator();//线性;
-        mInterpolator[1] = new AccelerateInterpolator();//加速;
-        mInterpolator[2] = new DecelerateInterpolator();//减速;
-        mInterpolator[3] = new AccelerateDecelerateInterpolator();//先加速后减速;
+        mInterpolator[0] = new DecelerateInterpolator();//减速;
+        mInterpolator[1] = new AccelerateInterpolator();//加速
+        mInterpolator[2] = new LinearInterpolator();//线性
+        mInterpolator[3] = new AccelerateDecelerateInterpolator();//先加速后减速
         //爱心集合
         mFavorDrawables = new Drawable[3];
         mFavorDrawables[0] = ContextCompat.getDrawable(mContext, R.mipmap.ic_favor_red);
@@ -111,7 +111,7 @@ public class FavorLayout extends RelativeLayout {
 
         ImageView imageView = new ImageView(getContext());
         //随机选一个
-        imageView.setImageDrawable(mFavorDrawables[mRandom.nextInt(3)]);
+        imageView.setImageDrawable(mFavorDrawables[mRandom.nextInt(mFavorDrawables.length)]);
         imageView.setLayoutParams(mLayoutParams);
 
         addView(imageView);
@@ -201,7 +201,7 @@ public class FavorLayout extends RelativeLayout {
         AnimatorSet finalSet = new AnimatorSet();
         finalSet.playSequentially(set);
         finalSet.playSequentially(set, bezierValueAnimator);
-        finalSet.setInterpolator(mInterpolator[mRandom.nextInt(4)]);//实现随机变速
+        finalSet.setInterpolator(mInterpolator[mRandom.nextInt(mInterpolator.length)]);//实现随机变速
         finalSet.setTarget(target);
         return finalSet;
     }
