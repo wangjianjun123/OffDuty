@@ -3,6 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.study.offduty.ui.view.WaveView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <com.study.offduty.ui.view.FavorLayout
         android:id="@+id/viewFavor"
         android:layout_width="match_parent"
@@ -18,7 +22,7 @@
         android:layout_marginTop="50dp"
         android:shadowRadius="10"
         android:textColor="#ffffffff"
-        android:textSize="160sp" />
+        android:textSize="80sp" />
 
     <TextView
         android:id="@+id/tvUnit"

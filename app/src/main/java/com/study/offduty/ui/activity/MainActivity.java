@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         viewFavor.addFavor();
                     }
-                }, 0);
+                }, 1000);
             }
 
             @Override

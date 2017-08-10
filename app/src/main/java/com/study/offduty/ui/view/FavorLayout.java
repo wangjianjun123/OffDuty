@@ -3,7 +3,6 @@ package com.study.offduty.ui.view;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.PointF;
@@ -33,7 +32,6 @@ public class FavorLayout extends RelativeLayout {
     private Context mContext;
     private Drawable[] mFavorDrawables;
     private Interpolator[] mInterpolator;
-    private LayoutParams mLayoutParams;
     private int mWidth;
     private int mHeight;
     private Random mRandom = new Random();//用于实现随机功能
@@ -70,7 +68,7 @@ public class FavorLayout extends RelativeLayout {
     private void init(Context context) {
         mContext = context;
         //设置背景颜色
-        setBackgroundColor(ContextCompat.getColor(context, R.color.colorBlue50));
+        setBackgroundColor(ContextCompat.getColor(context, R.color.noColor));
         //系统的差值器
         mInterpolator = new Interpolator[4];
         mInterpolator[0] = new DecelerateInterpolator();//减速;
@@ -78,30 +76,11 @@ public class FavorLayout extends RelativeLayout {
         mInterpolator[2] = new LinearInterpolator();//线性
         mInterpolator[3] = new AccelerateDecelerateInterpolator();//先加速后减速
         //爱心集合
-        mFavorDrawables = new Drawable[3];
-        mFavorDrawables[0] = ContextCompat.getDrawable(mContext, R.mipmap.ic_favor_red);
-        mFavorDrawables[1] = ContextCompat.getDrawable(mContext, R.mipmap.ic_favor_yellow);
-        mFavorDrawables[2] = ContextCompat.getDrawable(mContext, R.mipmap.ic_favor_green);
-        //底部 并且 水平居中
-        mLayoutParams = new LayoutParams(mFavorDrawables[0].getIntrinsicWidth(), mFavorDrawables[0].getIntrinsicHeight());
-        mLayoutParams.addRule(CENTER_HORIZONTAL, TRUE); //这里的TRUE 要注意 不是true
-        mLayoutParams.addRule(ALIGN_PARENT_BOTTOM, TRUE);
-    }
-
-    /**
-     * 利用ObjectAnimator AnimatorSet来实现 alpha以及缩放功能
-     */
-    private AnimatorSet getEnterAnimator(final View target) {
-
-        ObjectAnimator alpha = ObjectAnimator.ofFloat(target, View.ALPHA, 0.2f, 1f);
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(target, View.SCALE_X, 0.2f, 1f);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(target, View.SCALE_Y, 0.2f, 1f);
-        AnimatorSet enter = new AnimatorSet();
-        enter.setDuration(500);
-        enter.setInterpolator(new LinearInterpolator());
-        enter.playTogether(alpha, scaleX, scaleY);
-        enter.setTarget(target);
-        return enter;
+        mFavorDrawables = new Drawable[4];
+        mFavorDrawables[0] = ContextCompat.getDrawable(mContext, R.mipmap.icon_little_fish);
+        mFavorDrawables[1] = ContextCompat.getDrawable(mContext, R.mipmap.icon_yellow_fish);
+        mFavorDrawables[2] = ContextCompat.getDrawable(mContext, R.mipmap.icon_blue_fish);
+        mFavorDrawables[3] = ContextCompat.getDrawable(mContext, R.mipmap.icon_big_fish);
     }
 
     /**
@@ -111,8 +90,11 @@ public class FavorLayout extends RelativeLayout {
 
         ImageView imageView = new ImageView(getContext());
         //随机选一个
-        imageView.setImageDrawable(mFavorDrawables[mRandom.nextInt(mFavorDrawables.length)]);
-        imageView.setLayoutParams(mLayoutParams);
+        int random = mRandom.nextInt(mFavorDrawables.length);
+        LayoutParams layoutParams = new LayoutParams(mFavorDrawables[random].getIntrinsicWidth()
+                , mFavorDrawables[random].getIntrinsicHeight());
+        imageView.setImageDrawable(mFavorDrawables[random]);
+        imageView.setLayoutParams(layoutParams);
 
         addView(imageView);
 
@@ -147,14 +129,14 @@ public class FavorLayout extends RelativeLayout {
         //初始化一个BezierEvaluator
         BezierEvaluator evaluator = new BezierEvaluator(getPointF(2), getPointF(1));
 
-        //这里最好画个图 理解一下 传入了起点 和 终点
+        //这里最好画个图 理解一下 传入了起点 和 终点(从屏幕右边进入)
         ValueAnimator animator = ValueAnimator.ofObject(
                 evaluator
-                , new PointF((mWidth - mFavorDrawables[0].getIntrinsicWidth()) / 2, mHeight - mFavorDrawables[0].getIntrinsicHeight())
-                , new PointF(mRandom.nextInt(mWidth), 0));
+                , new PointF(mWidth + 100, mHeight - mFavorDrawables[0].getIntrinsicHeight())
+                , new PointF(0, mRandom.nextInt(mHeight / 2) + (mHeight / 2)));
         animator.addUpdateListener(new BezierListener(target));
         animator.setTarget(target);
-        animator.setDuration(3000);
+        animator.setDuration(5000);
         return animator;
     }
 
@@ -187,7 +169,7 @@ public class FavorLayout extends RelativeLayout {
         PointF pointF = new PointF();
         pointF.x = mRandom.nextInt(mWidth);
         //scale 为了控制第二点始终位于第一个点的上方
-        pointF.y = mRandom.nextInt(mHeight) / scale;
+        pointF.y = mRandom.nextInt(mHeight / 2) / scale + (mHeight / 2);
         return pointF;
     }
 
@@ -195,12 +177,10 @@ public class FavorLayout extends RelativeLayout {
      * 最终动画
      */
     private Animator getAnimator(View target) {
-        AnimatorSet set = getEnterAnimator(target);
         ValueAnimator bezierValueAnimator = getBezierValueAnimator(target);
 
         AnimatorSet finalSet = new AnimatorSet();
-        finalSet.playSequentially(set);
-        finalSet.playSequentially(set, bezierValueAnimator);
+        finalSet.playSequentially(bezierValueAnimator);
         finalSet.setInterpolator(mInterpolator[mRandom.nextInt(mInterpolator.length)]);//实现随机变速
         finalSet.setTarget(target);
         return finalSet;

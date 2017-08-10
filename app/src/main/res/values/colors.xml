@@ -10,4 +10,6 @@
     <color name="colorGreen">#4CAF50</color>
     <color name="colorRed">#F44336</color>
     <color name="colorBlue50">#E3F2FD</color>
+    <color name="colorBlue200">#90CAF9</color>
+    <color name="noColor">#00000000</color>
 </resources>
