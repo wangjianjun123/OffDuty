@@ -2,9 +2,12 @@ package com.study.offduty.ui.activity;
 
 import android.os.Bundle;
 import android.os.Handler;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -40,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     ShowMode showMode = ShowMode.MINUTE;
     Handler handler = new Handler();
 
+    public static final String TAG = "MainActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         timeNow = System.currentTimeMillis();
         calendarOff = Calendar.getInstance();
         String offStr = DateUtil.getDay(timeNow) + " 17:30:00";
-        Date tempDate = DateUtil.str2Date(offStr, DateUtil.FORMAT_YMDHM);
+        Date tempDate = DateUtil.str2Date(offStr, DateUtil.FORMAT_YMDHMS);
         calendarOff.setTime(tempDate);
         timeOffWork = calendarOff.getTimeInMillis();
         String timeLeftMinutes = getTimeLeft();
