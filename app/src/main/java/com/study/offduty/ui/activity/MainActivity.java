@@ -5,8 +5,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -81,62 +79,59 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         String timeLeftMinutes = getTimeLeft();
         tvMain.setText(timeLeftMinutes);
         tvUnit.setText(R.string.str_min);
-        handler.post(runnable);
+        handler.post(runnableTimeChange);
+
+        viewFavor.post(runnableFavor);
+
         tvMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (showMode) {
                     case MINUTE:
                         showMode = ShowMode.SECOND;
-                        handler.removeCallbacks(runnable);
-                        handler.post(runnable);
+                        handler.removeCallbacks(runnableTimeChange);
+                        handler.post(runnableTimeChange);
                         tvUnit.setText(R.string.str_sec);
                         break;
                     case SECOND:
+                        showMode = ShowMode.MILLIS;
+                        handler.removeCallbacks(runnableTimeChange);
+                        handler.post(runnableTimeChange);
+                        tvUnit.setText(R.string.str_mil);
+                        break;
                     case MILLIS:
                         showMode = ShowMode.MINUTE;
-                        handler.removeCallbacks(runnable);
-                        handler.post(runnable);
-                        tvUnit.setText(R.string.str_min);
+                        handler.removeCallbacks(runnableTimeChange);
+                        handler.post(runnableTimeChange);
+                        tvUnit.setText(R.string.str_mil);
                         break;
                 }
             }
         });
 
-        //爱心
-        tvMain.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                viewFavor.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        viewFavor.addFavor();
-                    }
-                }, 1000);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
         checkUpdate();
     }
 
     /**
      * 时间刷新runnable
      */
-    Runnable runnable = new Runnable() {
+    Runnable runnableTimeChange = new Runnable() {
         @Override
         public void run() {
             String timeLeftMinutes = getTimeLeft();
             tvMain.setText(timeLeftMinutes);
-            handler.postDelayed(this, 1000);
+            handler.postDelayed(this, 30);
+        }
+    };
+
+    /**
+     * 漂浮物runnable
+     */
+    Runnable runnableFavor = new Runnable() {
+        @Override
+        public void run() {
+            viewFavor.addFavor();
+            viewFavor.postDelayed(this, 2000);
         }
     };
 
