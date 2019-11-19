@@ -1,8 +1,10 @@
 package com.study.offduty.ui.activity;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.os.Handler;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.Editable;
@@ -17,16 +19,21 @@ import com.study.offduty.utils.DateUtil;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * Created by wjj
  * Date：2016/12/29  20：00
  * Description：主函数
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
+
+    public static final int RC_CAMERA_AND_LOCATION = 0;
 
     @BindView(R.id.tvTimeLeft)
     TextView tvMain;
@@ -49,14 +56,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
-        init();
+        methodRequiresTwoPermission();
     }
 
     /**
      * 初始化
      */
     private void init() {
+        ButterKnife.bind(this);
         timeNow = System.currentTimeMillis();
         calendarOff = Calendar.getInstance();
         String offStr = DateUtil.getDay(timeNow) + " 17:30:00";
@@ -146,10 +153,41 @@ public class MainActivity extends AppCompatActivity {
         return String.valueOf(timeLeft);
     }
 
+    @Override
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+        Log.w(TAG, "onPermissionsGranted: " + perms.toString());
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+        Log.w(TAG, "onPermissionsDenied: " + perms.toString());
+        String[] strings = new String[perms.size()];
+        perms.toArray(strings);
+        EasyPermissions.requestPermissions(MainActivity.this, "请允许程序获取必要的运行权限", RC_CAMERA_AND_LOCATION, strings);
+    }
+
     public enum ShowMode {
         HOUR,
         MINUTE,
         SECOND,
         MILLIS
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @AfterPermissionGranted(RC_CAMERA_AND_LOCATION)
+    private void methodRequiresTwoPermission() {
+        String[] perms = {
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_PHONE_STATE};
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            init();
+        } else {
+            EasyPermissions.requestPermissions(this, "请允许程序获取必要的运行权限", RC_CAMERA_AND_LOCATION, perms);
+        }
     }
 }
