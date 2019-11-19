@@ -1,6 +1,38 @@
 apply plugin: 'com.android.application'
 
 android {
+
+    def keystoreFilepath = ''
+    def keystorePSW = ''
+    def keystoreAlias = ''
+    def keystoreAliasPSW = ''
+    def keyfile = file('s.keystore.temp')
+
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    keystoreFilepath = properties.getProperty("keystore.path")
+
+    if (keystoreFilepath) {
+        keystorePSW = properties.getProperty("keystore.password")
+        keystoreAlias = properties.getProperty("keystore.alias")
+        keystoreAliasPSW = properties.getProperty("keystore.alias_password")
+        keyfile = file(keystoreFilepath)
+    }
+
+    signingConfigs {
+        debug {
+            keyAlias keystoreAlias
+            keyPassword keystoreAliasPSW
+            storeFile keyfile
+            storePassword keystorePSW
+        }
+        release {
+            keyAlias keystoreAlias
+            keyPassword keystoreAliasPSW
+            storeFile keyfile
+            storePassword keystorePSW
+        }
+    }
     compileSdkVersion 29
     buildToolsVersion "25.0.3"
     defaultConfig {
