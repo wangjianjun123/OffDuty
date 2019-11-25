@@ -76,15 +76,14 @@ public class FavorLayout extends RelativeLayout {
         mInterpolator[2] = new LinearInterpolator();//线性
         mInterpolator[3] = new AccelerateDecelerateInterpolator();//先加速后减速
         //图片集合
-        mFavorDrawables = new Drawable[8];
-        mFavorDrawables[0] = ContextCompat.getDrawable(mContext, R.mipmap.icon_little_fish);
-        mFavorDrawables[1] = ContextCompat.getDrawable(mContext, R.mipmap.icon_yellow_fish);
-        mFavorDrawables[2] = ContextCompat.getDrawable(mContext, R.mipmap.icon_blue_fish);
-        mFavorDrawables[3] = ContextCompat.getDrawable(mContext, R.mipmap.icon_big_fish);
-        mFavorDrawables[4] = ContextCompat.getDrawable(mContext, R.mipmap.person_2_ting);
-        mFavorDrawables[5] = ContextCompat.getDrawable(mContext, R.mipmap.person_jun);
-        mFavorDrawables[6] = ContextCompat.getDrawable(mContext, R.mipmap.person_yu);
-        mFavorDrawables[7] = ContextCompat.getDrawable(mContext, R.mipmap.person_wan);
+        mFavorDrawables = new Drawable[7];
+        mFavorDrawables[0] = ContextCompat.getDrawable(mContext, R.mipmap.icon_big_fish);
+        mFavorDrawables[1] = ContextCompat.getDrawable(mContext, R.mipmap.icon_blue_fish);
+        mFavorDrawables[2] = ContextCompat.getDrawable(mContext, R.mipmap.icon_green_fish);
+        mFavorDrawables[3] = ContextCompat.getDrawable(mContext, R.mipmap.icon_little_fish);
+        mFavorDrawables[4] = ContextCompat.getDrawable(mContext, R.mipmap.icon_orange_fish);
+        mFavorDrawables[5] = ContextCompat.getDrawable(mContext, R.mipmap.icon_purple_fish);
+        mFavorDrawables[6] = ContextCompat.getDrawable(mContext, R.mipmap.icon_yellow_fish);
     }
 
     /**
