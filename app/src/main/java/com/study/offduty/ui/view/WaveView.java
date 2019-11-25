@@ -5,14 +5,16 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.Region;
-import androidx.core.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
+
+import androidx.core.content.ContextCompat;
 
 import com.study.offduty.R;
 
@@ -27,6 +29,7 @@ public class WaveView extends View {
     private Context mContext;
     //波浪画笔
     private Paint mPaint;
+
     //波浪Path类
     private Path mPath;
     //一个波浪长度
@@ -44,6 +47,8 @@ public class WaveView extends View {
     //屏幕宽度
     private int mScreenWidth;
     private Bitmap mBitmapBoat;
+
+    public static final String TAG = "WaveView";
 
     public WaveView(Context context) {
         super(context);
@@ -118,7 +123,10 @@ public class WaveView extends View {
         Region clip = new Region((int) (x - 0.1), 0, (int) x, mScreenHeight);//宽度为0.1的一根直线
         region.setPath(mPath, clip);
         Rect rect = region.getBounds();
-        canvas.drawBitmap(mBitmapBoat, rect.right - (mBitmapBoat.getWidth() / 2), rect.top - (mBitmapBoat.getHeight() / 2), mPaint);
+        Matrix matrix = new Matrix();
+        matrix.postRotate(0, mBitmapBoat.getWidth() / 2, mBitmapBoat.getHeight());
+        matrix.postTranslate(rect.right - (mBitmapBoat.getWidth() / 2), rect.top - (mBitmapBoat.getHeight()));
+        canvas.drawBitmap(mBitmapBoat, matrix, mPaint);
     }
 
     /**
